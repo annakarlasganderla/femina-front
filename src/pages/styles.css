@@ -1,0 +1,8 @@
+.container {
+    margin: 0;
+    /* espaçamento externo entre um elemento e outro */
+    padding: 0;
+    /* preenchimento interno do elemento */
+    box-sizing: border-box;
+    /* medida da caixa a partir da borda */
+}
