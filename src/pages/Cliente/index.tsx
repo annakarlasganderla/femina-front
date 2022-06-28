@@ -1,3 +1,6 @@
-export default function Cliente(){
-    return <h1>pagina de cliente</h1>
+import { Footer } from "../../components/Global/Footer"
+
+
+export default function Cliente() {
+    return <Footer/>
 }

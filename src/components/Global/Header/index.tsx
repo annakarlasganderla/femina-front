@@ -1,7 +1,6 @@
 import * as S from "./styles";
 
 import {AiOutlineUser, AiOutlineUserAdd} from 'react-icons/ai';
-import { InputAdornment } from "@mui/material";
 
 export const Header = () => {
   return (
