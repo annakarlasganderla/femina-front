@@ -3,9 +3,8 @@ import { ChangeEvent, useState } from "react";
 import { IconsProps } from "../../../types/Icons";
 import IoEyeSharp from "react-icons/io";
 import BsEyeSlashFill from "react-icons/bs"
-import AddIcon from '@mui/icons-material/Add';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
+
 import * as S from "./styles";
 
 interface TextFieldProps {
@@ -61,7 +60,7 @@ export const TextFieldComponent = ({
   return (
     <>
       <S.StyledTextField
-        variant="outlined"
+        variant="standard"
         label={label}
         name={name}
         placeholder={placeholder}
@@ -85,7 +84,7 @@ export const TextFieldComponent = ({
                     cursor: 'pointer'
                   }}
                 >
-                  {visiblePassword ? <RemoveRedEyeIcon/>  : <VisibilityOffIcon/>}
+                  {visiblePassword ? <AiOutlineEye/>  : <AiOutlineEyeInvisible/>}
                 </InputAdornment>
               )}
             </>
