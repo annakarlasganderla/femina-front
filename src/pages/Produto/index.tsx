@@ -6,9 +6,11 @@ import { Option } from "../../components/Generic/Select/styles";
 import { ModalNovaMarca } from "./components/NovaMarca";
 import { ModalNovaCategoria } from "./components/NovaCategoria";
 import { ModalNovoModelo } from "./components/NovoModelo";
+import { ModalNovaCor } from "./components/NovaCor";
 import { MarcaProps } from "../../interfaces/Marca";
 import { CategoriaProps } from "../../interfaces/Categoria";
 import { ModeloProps } from "../../interfaces/Modelo";
+import { CorProps } from "../../interfaces/Cor";
 
 import { Alert } from "../../components/Generic/Alert";
 import { api } from "../../service/api";
@@ -47,11 +49,46 @@ export default function Produtos() {
   );
   const [modelos, setModelos] = useState<ModeloProps[]>([]);
 
+  const corObjInitialState = {
+    nome: "",
+    hexadecimal: "",
+  };
+  const [openModalCor, setOpenModalCor] = useState(false);
+  const [corObj, setCorObj] = useState<CorProps>(corObjInitialState);
+  const [cores, setCores] = useState<CorProps[]>([]);
+
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettingsProps>({
     message: "",
     type: "success",
   });
+
+  const postCor = () => {
+    const corObjFinal = {
+      ...corObj,
+    };
+    api
+      .post("cores", corObjFinal)
+      .then((response) => {
+        console.log(response);
+        setAlertSettings({
+          message: "Cor cadastrada com sucesso!",
+          type: "success",
+        });
+        setOpenModalCor(false);
+        getCores();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertSettings({
+          message: "Erro ao cadastrar cor!",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        setOpenAlert(true);
+      });
+  };
 
   const postModelo = () => {
     const modeloObjFinal = {
@@ -134,6 +171,17 @@ export default function Produtos() {
       });
   };
 
+  const getCores = () => {
+    api
+      .get("cores")
+      .then((response) => {
+        setCores(response.data.content);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const getModelos = () => {
     api
       .get("modelos")
@@ -171,10 +219,12 @@ export default function Produtos() {
     getMarcas();
     getCategorias();
     getModelos();
+    getCores();
   }, []);
 
   return (
     <BaseContainer>
+      
       <S.Container>
         <TextFieldComponent label="Nome do produto" style={{ width: "100%" }} />
 
@@ -257,10 +307,14 @@ export default function Produtos() {
         <S.FilterContainer>
           <div>
             <Select label={"Cor"} style={{ width: "57rem" }}>
-              <Option>teste</Option>
+              {cores.map((cores) => (
+                <Option key={cores.id} value={cores.nome}>
+                  {cores.nome}
+                </Option>
+              ))}
             </Select>
             <S.LinkContainer>
-              <S.StyledLink>+ Nova Cor</S.StyledLink>
+              <S.StyledLink onClick={() => setOpenModalCor(true)}>+ Nova Cor</S.StyledLink>
             </S.LinkContainer>
           </div>
         </S.FilterContainer>
@@ -308,6 +362,13 @@ export default function Produtos() {
         modeloObj={modeloObj}
         setModeloObj={setModeloObj}
         postModelo={postModelo}
+      />
+      <ModalNovaCor
+        openModalCor={openModalCor}
+        handleCloseModal={() => setOpenModalCor(false)}
+        corObj={corObj}
+        setCorObj={setCorObj}
+        postCor={postCor}
       />
 
       <Alert
