@@ -2,17 +2,14 @@ import { BaseContainer } from "../../utils/Layout/BaseContainer";
 import { TextFieldComponent } from "../../components/Generic/TextField";
 import { Select } from "../../components/Generic/Select";
 import { Option } from "../../components/Generic/Select/styles";
-import {
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Link,
-  RadioGroup,
-} from "@mui/material";
-import { RadioButton } from "../../components/Generic/RadioButton";
+
 import { ModalNovaMarca } from "./components/NovaMarca";
 import { ModalNovaCategoria } from "./components/NovaCategoria";
+import { ModalNovoModelo } from "./components/NovoModelo";
 import { MarcaProps } from "../../interfaces/Marca";
+import { CategoriaProps } from "../../interfaces/Categoria";
+import { ModeloProps } from "../../interfaces/Modelo";
+
 import { Alert } from "../../components/Generic/Alert";
 import { api } from "../../service/api";
 
@@ -28,6 +25,27 @@ export default function Produtos() {
   const marcaObjInitialState = {
     nome: "",
   };
+  const [marcas, setMarcas] = useState<MarcaProps[]>([]);
+  const [openModalMarca, setOpenModalMarca] = useState(false);
+  const [marcaObj, setMarcaObj] = useState<MarcaProps>(marcaObjInitialState);
+
+  const categoriaObjInitialState = {
+    nome: "",
+  };
+  const [openModalCategoria, setOpenModalCategoria] = useState(false);
+  const [categoriaObj, setCategoriaObj] = useState<CategoriaProps>(
+    categoriaObjInitialState
+  );
+  const [categorias, setCategorias] = useState<CategoriaProps[]>([]);
+
+  const modeloObjInitialState = {
+    nome: "",
+  };
+  const [openModalModelo, setOpenModalModelo] = useState(false);
+  const [modeloObj, setModeloObj] = useState<ModeloProps>(
+    modeloObjInitialState
+  );
+  const [modelos, setModelos] = useState<ModeloProps[]>([]);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettingsProps>({
@@ -35,11 +53,59 @@ export default function Produtos() {
     type: "success",
   });
 
-  const [marcas, setMarcas] = useState<MarcaProps[]>([]);
-  const [openModalMarca, setOpenModalMarca] = useState(false);
-  const [openModalCategoria, setOpenModalCategoria] = useState(false);
-  const [marcaObj, setMarcaObj] = useState<MarcaProps>(marcaObjInitialState);
-  console.log(marcas);
+  const postModelo = () => {
+    const modeloObjFinal = {
+      ...modeloObj,
+    };
+    api
+      .post("modelos", modeloObjFinal)
+      .then((response) => {
+        console.log(response);
+        setAlertSettings({
+          message: "Modelo cadastrado com sucesso!",
+          type: "success",
+        });
+        setOpenModalModelo(false);
+        getModelos();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertSettings({
+          message: "Erro ao cadastrar modelo!",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        setOpenAlert(true);
+      });
+  };
+
+  const postCategoria = () => {
+    const catObjFinal = {
+      ...categoriaObj,
+    };
+    api
+      .post("categorias", catObjFinal)
+      .then((response) => {
+        console.log(response);
+        setAlertSettings({
+          message: "Categoria cadastrada com sucesso!",
+          type: "success",
+        });
+        setOpenModalCategoria(false);
+        getCategorias();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertSettings({
+          message: "Erro ao cadastrar categoria!",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        setOpenAlert(true);
+      });
+  };
 
   const postMarca = () => {
     const marcaObjFinal = {
@@ -68,6 +134,17 @@ export default function Produtos() {
       });
   };
 
+  const getModelos = () => {
+    api
+      .get("modelos")
+      .then((response) => {
+        setModelos(response.data.content);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const getMarcas = () => {
     api
       .get("marcas")
@@ -79,14 +156,27 @@ export default function Produtos() {
       });
   };
 
+  const getCategorias = () => {
+    api
+      .get("categorias")
+      .then((response) => {
+        setCategorias(response.data.content);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     getMarcas();
+    getCategorias();
+    getModelos();
   }, []);
 
   return (
     <BaseContainer>
       <S.Container>
-        <TextFieldComponent label="Nome do produto" style={{ width: "99%" }} />
+        <TextFieldComponent label="Nome do produto" style={{ width: "100%" }} />
 
         <S.TextContainer>
           <div>
@@ -104,9 +194,11 @@ export default function Produtos() {
 
         <S.FilterContainer>
           <div>
-            <Select label={"Marca"} style={{ width: "25rem" }}>
+            <Select label={"Marca"} style={{ width: "57rem" }}>
               {marcas.map((marcas) => (
-                <Option key={marcas.id} value={marcas.nome}>{marcas.nome}</Option>
+                <Option key={marcas.id} value={marcas.nome}>
+                  {marcas.nome}
+                </Option>
               ))}
             </Select>
             <S.LinkContainer>
@@ -115,21 +207,33 @@ export default function Produtos() {
               </S.StyledLink>
             </S.LinkContainer>
           </div>
+        </S.FilterContainer>
 
+        <S.FilterContainer>
           <div>
-            <Select label={"Modelo"} style={{ width: "25rem" }}>
-              <Option>teste</Option>
+            <Select label={"Modelo"} style={{ width: "57rem" }}>
+              {modelos.map((modelo) => (
+                <Option key={modelo.id} value={modelo.nome}>
+                  {modelo.nome}
+                </Option>
+              ))}
             </Select>
             <S.LinkContainer>
-              <S.StyledLink>+ Novo Modelo</S.StyledLink>
+              <S.StyledLink onClick={() => setOpenModalModelo(true)}>
+                + Novo Modelo
+              </S.StyledLink>
             </S.LinkContainer>
           </div>
         </S.FilterContainer>
 
         <S.FilterContainer>
           <div>
-            <Select label={"Categoria"} style={{ width: "25rem" }}>
-              <Option>teste</Option>
+            <Select label={"Categoria"} style={{ width: "57rem" }}>
+              {categorias.map((categoria) => (
+                <Option key={categoria.id} value={categoria.nome}>
+                  {categoria.nome}
+                </Option>
+              ))}
             </Select>
             <S.LinkContainer>
               <S.StyledLink onClick={() => setOpenModalCategoria(true)}>
@@ -137,9 +241,11 @@ export default function Produtos() {
               </S.StyledLink>
             </S.LinkContainer>
           </div>
+        </S.FilterContainer>
 
+        <S.FilterContainer>
           <div>
-            <Select label={"Fornecedor"} style={{ width: "25rem" }}>
+            <Select label={"Fornecedor"} style={{ width: "57rem" }}>
               <Option>teste</Option>
             </Select>
             <S.LinkContainer>
@@ -150,21 +256,34 @@ export default function Produtos() {
 
         <S.FilterContainer>
           <div>
-            <Select label={"Cor"} style={{ width: "25rem" }}>
+            <Select label={"Cor"} style={{ width: "57rem" }}>
               <Option>teste</Option>
             </Select>
             <S.LinkContainer>
               <S.StyledLink>+ Nova Cor</S.StyledLink>
             </S.LinkContainer>
           </div>
+        </S.FilterContainer>
 
+        <S.FilterContainer>
           <div>
-            <Select label={"Tamanho"} style={{ width: "25rem" }}>
-              <Option>teste</Option>
+            <Select label={"Tamanho"} style={{ width: "57rem" }}>
+              <Option key={1} value={"pp"}>
+                PP
+              </Option>
+              <Option key={2} value={"p"}>
+                P
+              </Option>
+              <Option key={3} value={"m"}>
+                M
+              </Option>
+              <Option key={4} value={"g"}>
+                G
+              </Option>
+              <Option key={5} value={"gg"}>
+                GG
+              </Option>
             </Select>
-            <S.LinkContainer>
-              <S.StyledLink>+ Novo Tamanho</S.StyledLink>
-            </S.LinkContainer>
           </div>
         </S.FilterContainer>
       </S.Container>
@@ -179,6 +298,16 @@ export default function Produtos() {
       <ModalNovaCategoria
         openModalCategoria={openModalCategoria}
         handleCloseModalCategoria={() => setOpenModalCategoria(false)}
+        categoriaObj={categoriaObj}
+        setCategoriaObj={setCategoriaObj}
+        postCategoria={postCategoria}
+      />
+      <ModalNovoModelo
+        openModalModelo={openModalModelo}
+        handleCloseModalModelo={() => setOpenModalModelo(false)}
+        modeloObj={modeloObj}
+        setModeloObj={setModeloObj}
+        postModelo={postModelo}
       />
 
       <Alert

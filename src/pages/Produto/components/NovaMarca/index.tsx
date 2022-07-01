@@ -36,7 +36,7 @@ export const ModalNovaMarca = ({
       />
 
       <S.ButtonArea>
-        <ButtonComponent title="Cancelar" themeColor="#9B4A46" />
+        <ButtonComponent title="Cancelar" themeColor="#9B4A46" onClick={() => handleCloseModal()} />
         <ButtonComponent title="Cadastrar" onClick={() => postMarca()} />
       </S.ButtonArea>
     </Modal>
