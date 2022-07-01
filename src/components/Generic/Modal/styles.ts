@@ -29,6 +29,7 @@ export const ModalContent = styled.div<ModalProps>`
     flex-direction: column;
     border: none;
     max-height: calc(100vh - 10rem);
+    font-family: poppins;
 
     & .MuiGrid-item {
       padding: 1rem;
@@ -41,7 +42,7 @@ export const ModalContent = styled.div<ModalProps>`
     }
 
     h2 {
-      margin: 1.5rem 0;
+      margin: 2rem 0;
       text-align: center;
       color: #7A0000;
     }

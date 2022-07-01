@@ -4,20 +4,7 @@ import { MouseEventHandler } from 'react';
 interface ButtonProps {
   title?: string | null;
   type?: 'button' | 'submit' | 'reset';
-  themeColor?:
-    | 'primary'
-    | 'success'
-    | 'error'
-    | 'light'
-    | 'primary-1'
-    | 'primary-2'
-    | 'secondary-1'
-    | 'secondary-2'
-    | 'grey'
-    | 'light-1'
-    | 'light-2'
-    | 'light-3'
-    | 'none';
+  themeColor?:string;
 
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   disabled?: boolean;
@@ -35,7 +22,7 @@ interface ButtonProps {
 export const ButtonComponent = ({
   disabled,
   title,
-  themeColor = 'primary',
+  themeColor = '#7a0000',
   onClick,
   width,
   height,

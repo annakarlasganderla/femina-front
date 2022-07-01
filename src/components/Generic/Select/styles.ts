@@ -8,11 +8,16 @@ export const SelectWrapper = styled(Select)`
     
       background: white;
       color: #9B4A46;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
+      
 
       &::after {
         border-color: #9B4A46;
+        font-size: 1.4rem;
+        color: green;
+
       }
+
     
   }
 `;
@@ -27,9 +32,11 @@ export const SelectLabel = styled(InputLabel)<InputLabelProps>`
     ${({ requiredType }) => css`
       
       margin-top: 0.3rem;
+      font-size: 1.4rem;
+      
 
       &.MuiInputLabel-filled {
-        color: #9B4A46;
+        color: #7A0000;
       }
 
       &.MuiInputLabel-filled.Mui-focused {
@@ -56,6 +63,6 @@ export const SelectLabel = styled(InputLabel)<InputLabelProps>`
 
 export const Option = styled(MenuItem)`
   &&& {
-    font-size: 1rem;
+    font-size: 1.4rem;
   }
 `;

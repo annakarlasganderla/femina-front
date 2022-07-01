@@ -1,8 +1,8 @@
-import { Button } from '@mui/material';
-import styled, { css } from 'styled-components';
+import { Button } from "@mui/material";
+import styled, { css } from "styled-components";
 
-import { setTextColor, setBorderColor } from '../../../utils/components/Button';
-import { setBackgroundColor } from '../../../utils/components/Generic';
+import { setTextColor, setBorderColor } from "../../../utils/components/Button";
+import { setBackgroundColor } from "../../../utils/components/Generic";
 
 interface ButtonProps {
   themeColor: string;
@@ -27,11 +27,11 @@ export const StyledButton = styled(Button)<ButtonProps>`
 
       themeColor,
       disabled,
-      
+
       iconTop,
-      iconSize
+      iconSize,
     }) => css`
-      border-radius: ${() => (isTitled ? '5px' : '50%')};
+      border-radius: ${() => (isTitled ? "5px" : "50%")};
       display: flex;
       align-items: center;
       justify-content: center;
@@ -42,7 +42,7 @@ export const StyledButton = styled(Button)<ButtonProps>`
       ${() => {
         if (!disablePaddingInline) {
           return css`
-            padding-inline: ${isTitled ? '3.2rem' : '1.2rem'};
+            padding-inline: ${isTitled ? "3.2rem" : "1.2rem"};
           `;
         }
       }}
@@ -53,15 +53,13 @@ export const StyledButton = styled(Button)<ButtonProps>`
       font-weight: 500;
       text-transform: none;
       margin-top: 0px;
-      min-height: ${height || '3.9rem'};
-      min-width: ${width || '3.2rem'};
+      min-height: ${height || "3rem"};
+      min-width: ${width || "3rem"};
 
-      background-color: ${disabled
-        ? '#C2C2C2'
-        : setBackgroundColor(themeColor)};
+      background-color: ${disabled ? "#C2C2C2" : themeColor};
 
       svg {
-        fill: ${disabled ? '#C2C2C2' : 'currentColor'};
+        fill: ${disabled ? "#C2C2C2" : "currentColor"};
         ${() => {
           if (iconSize) {
             return css`
@@ -72,9 +70,7 @@ export const StyledButton = styled(Button)<ButtonProps>`
         }}
       }
 
-      color: ${disabled
-        ? "#fff"
-        : setTextColor(themeColor)};
+      color: white;
 
       ${() =>
         iconTop &&
