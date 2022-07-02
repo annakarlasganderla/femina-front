@@ -7,10 +7,13 @@ import { ModalNovaMarca } from "./components/NovaMarca";
 import { ModalNovaCategoria } from "./components/NovaCategoria";
 import { ModalNovoModelo } from "./components/NovoModelo";
 import { ModalNovaCor } from "./components/NovaCor";
+import { ModalNovoFornecedor } from "./components/NovoFornecedor";
+
 import { MarcaProps } from "../../interfaces/Marca";
 import { CategoriaProps } from "../../interfaces/Categoria";
 import { ModeloProps } from "../../interfaces/Modelo";
 import { CorProps } from "../../interfaces/Cor";
+import { FornecedorProps } from "../../interfaces/Fornecedor";
 
 import { Alert } from "../../components/Generic/Alert";
 import { api } from "../../service/api";
@@ -56,6 +59,24 @@ export default function Produtos() {
   const [openModalCor, setOpenModalCor] = useState(false);
   const [corObj, setCorObj] = useState<CorProps>(corObjInitialState);
   const [cores, setCores] = useState<CorProps[]>([]);
+
+  const fornecedorObjInitialState = {
+    name: "",
+    cnpj: "",
+    telefone: "",
+    numero: "",
+    email: "",
+    cep: "",
+    estado: "",
+    logradouro: "",
+    cidade: "",
+    pais: "",
+  };
+  const [fornecedorObj, setFornecedorObj] = useState<FornecedorProps>(
+    fornecedorObjInitialState
+  );
+  const [fornecedores, setFornecedores] = useState<FornecedorProps[]>([]);
+  const [openModalFornecedor, setOpenModalFornecedor] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettingsProps>({
@@ -171,6 +192,33 @@ export default function Produtos() {
       });
   };
 
+  const postFornecedor = () => {
+    const fornecedorObjFinal = {
+      ...fornecedorObj,
+    };
+    api
+      .post("fornecedores", fornecedorObjFinal)
+      .then((response) => {
+        console.log(response);
+        setAlertSettings({
+          message: "Fornecedor cadastrado com sucesso!",
+          type: "success",
+        });
+        setOpenModalFornecedor(false);
+        getFornecedores();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertSettings({
+          message: "Erro ao cadastrar fornecedor!",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        setOpenAlert(true);
+      });
+  }
+
   const getCores = () => {
     api
       .get("cores")
@@ -215,16 +263,27 @@ export default function Produtos() {
       });
   };
 
+  const getFornecedores = () => {
+    api
+      .get("fornecedores")
+      .then((response) => {
+        setFornecedores(response.data.content);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     getMarcas();
     getCategorias();
     getModelos();
     getCores();
+    getFornecedores();
   }, []);
 
   return (
     <BaseContainer>
-      
       <S.Container>
         <TextFieldComponent label="Nome do produto" style={{ width: "100%" }} />
 
@@ -295,17 +354,6 @@ export default function Produtos() {
 
         <S.FilterContainer>
           <div>
-            <Select label={"Fornecedor"} style={{ width: "57rem" }}>
-              <Option>teste</Option>
-            </Select>
-            <S.LinkContainer>
-              <S.StyledLink>+ Novo Fornecedor</S.StyledLink>
-            </S.LinkContainer>
-          </div>
-        </S.FilterContainer>
-
-        <S.FilterContainer>
-          <div>
             <Select label={"Cor"} style={{ width: "57rem" }}>
               {cores.map((cores) => (
                 <Option key={cores.id} value={cores.nome}>
@@ -314,7 +362,26 @@ export default function Produtos() {
               ))}
             </Select>
             <S.LinkContainer>
-              <S.StyledLink onClick={() => setOpenModalCor(true)}>+ Nova Cor</S.StyledLink>
+              <S.StyledLink onClick={() => setOpenModalCor(true)}>
+                + Nova Cor
+              </S.StyledLink>
+            </S.LinkContainer>
+          </div>
+        </S.FilterContainer>
+
+        <S.FilterContainer>
+          <div>
+            <Select label={"Fornecedor"} style={{ width: "57rem" }}>
+              {fornecedores.map((fornecedores) => (
+                <Option key={fornecedores.id} value={fornecedores.name}>
+                  {fornecedores.name}
+                </Option>
+              ))}
+            </Select>
+            <S.LinkContainer>
+              <S.StyledLink onClick={() => setOpenModalFornecedor(true)}>
+                + Novo Fornecedor
+              </S.StyledLink>
             </S.LinkContainer>
           </div>
         </S.FilterContainer>
@@ -369,6 +436,13 @@ export default function Produtos() {
         corObj={corObj}
         setCorObj={setCorObj}
         postCor={postCor}
+      />
+      <ModalNovoFornecedor
+        openModalFornecedor={openModalFornecedor}
+        handleCloseModalFornecedor={() => setOpenModalFornecedor(false)}
+        fornecedorObj={fornecedorObj}
+        setFornecedorObj={setFornecedorObj}
+        postFornecedor={postFornecedor}
       />
 
       <Alert

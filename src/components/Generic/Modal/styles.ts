@@ -31,6 +31,8 @@ export const ModalContent = styled.div<ModalProps>`
     max-height: calc(100vh - 10rem);
     font-family: poppins;
 
+    
+
     & .MuiGrid-item {
       padding: 1rem;
     }
