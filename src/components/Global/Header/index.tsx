@@ -24,7 +24,7 @@ export const Header = () => {
             onClick={() => setOpenSideBar(true)}
             size={30}
           />
-          <img src="../../../public/logoProvisoria.png" alt="logo" />
+          <img src="../../../public/logoProvisoria.svg" alt="logo" />
         </S.LogoArea>
 
         <S.StyledDrawer
