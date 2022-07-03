@@ -20,6 +20,8 @@ import { api } from "../../service/api";
 
 import * as S from "./styles";
 import { useEffect, useState } from "react";
+import { ProdutoProps } from "../../interfaces/Produto";
+import { ButtonComponent } from "../../components/Generic/Button";
 
 export interface AlertSettingsProps {
   message: string;
@@ -30,36 +32,16 @@ export default function Produtos() {
   const marcaObjInitialState = {
     nome: "",
   };
-  const [marcas, setMarcas] = useState<MarcaProps[]>([]);
-  const [openModalMarca, setOpenModalMarca] = useState(false);
-  const [marcaObj, setMarcaObj] = useState<MarcaProps>(marcaObjInitialState);
-
   const categoriaObjInitialState = {
     nome: "",
   };
-  const [openModalCategoria, setOpenModalCategoria] = useState(false);
-  const [categoriaObj, setCategoriaObj] = useState<CategoriaProps>(
-    categoriaObjInitialState
-  );
-  const [categorias, setCategorias] = useState<CategoriaProps[]>([]);
-
   const modeloObjInitialState = {
     nome: "",
   };
-  const [openModalModelo, setOpenModalModelo] = useState(false);
-  const [modeloObj, setModeloObj] = useState<ModeloProps>(
-    modeloObjInitialState
-  );
-  const [modelos, setModelos] = useState<ModeloProps[]>([]);
-
   const corObjInitialState = {
     nome: "",
     hexadecimal: "",
   };
-  const [openModalCor, setOpenModalCor] = useState(false);
-  const [corObj, setCorObj] = useState<CorProps>(corObjInitialState);
-  const [cores, setCores] = useState<CorProps[]>([]);
-
   const fornecedorObjInitialState = {
     name: "",
     cnpj: "",
@@ -72,12 +54,65 @@ export default function Produtos() {
     cidade: "",
     pais: "",
   };
+  const produtoObjInitialState = {
+    nome: "",
+    codigo: "",
+    valor: 0,
+    categoria: {
+      id: 1,
+      cadastrado: "2022-07-03T18:55:37.38791",
+      atualizado: "2022-07-03T18:55:37.38791",
+      nome: "notebook",
+    },
+    modelo: {
+      id: 1,
+      cadastrado: "2022-07-03T18:55:37.38791",
+      atualizado: "2022-07-03T18:55:37.38791",
+      nome: "Joguer",
+    },
+    fornecedor: {},
+    marca: {},
+    cor: {
+      id: 1,
+      cadastrado: "2022-07-03T18:55:37.38791",
+      atualizado: "2022-07-03T18:55:37.38791",
+      nome: "vermelho",
+      hexadecimal: "#ff0000",
+    },
+    tamanho: "",
+    descricao: "",
+    destaque: false,
+  };
+  const [marcas, setMarcas] = useState<MarcaProps[]>([]);
+  const [openModalMarca, setOpenModalMarca] = useState(false);
+  const [marcaObj, setMarcaObj] = useState<MarcaProps>(marcaObjInitialState);
+
+  const [openModalCategoria, setOpenModalCategoria] = useState(false);
+  const [categoriaObj, setCategoriaObj] = useState<CategoriaProps>(
+    categoriaObjInitialState
+  );
+  const [categorias, setCategorias] = useState<CategoriaProps[]>([]);
+
+  const [openModalModelo, setOpenModalModelo] = useState(false);
+  const [modeloObj, setModeloObj] = useState<ModeloProps>(
+    modeloObjInitialState
+  );
+  const [modelos, setModelos] = useState<ModeloProps[]>([]);
+
+  const [openModalCor, setOpenModalCor] = useState(false);
+  const [corObj, setCorObj] = useState<CorProps>(corObjInitialState);
+  const [cores, setCores] = useState<CorProps[]>([]);
+
   const [fornecedorObj, setFornecedorObj] = useState<FornecedorProps>(
     fornecedorObjInitialState
   );
   const [fornecedores, setFornecedores] = useState<FornecedorProps[]>([]);
   const [openModalFornecedor, setOpenModalFornecedor] = useState(false);
 
+  const [produtoObj, setProdutoObj] = useState<ProdutoProps>(
+    produtoObjInitialState
+  );
+  console.log(produtoObj);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettingsProps>({
     message: "",
@@ -217,7 +252,33 @@ export default function Produtos() {
       .finally(() => {
         setOpenAlert(true);
       });
-  }
+  };
+
+  const postProduto = () => {
+    const produtoObjFinal = {
+      ...produtoObj,
+    };
+    api
+      .post("produtos", produtoObjFinal)
+      .then((response) => {
+        console.log(response);
+        setAlertSettings({
+          message: "Produto cadastrado com sucesso!",
+          type: "success",
+        });
+        getFornecedores();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertSettings({
+          message: "Erro ao cadastrar produto!",
+          type: "error",
+        });
+      })
+      .finally(() => {
+        setOpenAlert(true);
+      });
+  };
 
   const getCores = () => {
     api
@@ -272,7 +333,7 @@ export default function Produtos() {
       .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     getMarcas();
@@ -285,11 +346,23 @@ export default function Produtos() {
   return (
     <BaseContainer>
       <S.Container>
-        <TextFieldComponent label="Nome do produto" style={{ width: "100%" }} />
+        <TextFieldComponent
+          label="Nome do produto"
+          style={{ width: "100%" }}
+          onChange={({ target }) =>
+            setProdutoObj({ ...produtoObj, nome: target.value })
+          }
+        />
 
         <S.TextContainer>
           <div>
-            <TextFieldComponent label="Código" style={{ width: "25rem" }} />
+            <TextFieldComponent
+              label="Código"
+              style={{ width: "25rem" }}
+              onChange={({ target }) =>
+                setProdutoObj({ ...produtoObj, codigo: target.value })
+              }
+            />
           </div>
 
           <div>
@@ -305,7 +378,13 @@ export default function Produtos() {
           <div>
             <Select label={"Marca"} style={{ width: "57rem" }}>
               {marcas.map((marcas) => (
-                <Option key={marcas.id} value={marcas.nome}>
+                <Option
+                  key={marcas.id}
+                  value={marcas.nome}
+                  onClick={() => {
+                    setProdutoObj({ ...produtoObj, marca: marcas });
+                  }}
+                >
                   {marcas.nome}
                 </Option>
               ))}
@@ -322,7 +401,13 @@ export default function Produtos() {
           <div>
             <Select label={"Modelo"} style={{ width: "57rem" }}>
               {modelos.map((modelo) => (
-                <Option key={modelo.id} value={modelo.nome}>
+                <Option
+                  key={modelo.id}
+                  value={modelo.nome}
+                  onClick={() => {
+                    setProdutoObj({ ...produtoObj, modelo: modelos as {} });
+                  }}
+                >
                   {modelo.nome}
                 </Option>
               ))}
@@ -339,7 +424,16 @@ export default function Produtos() {
           <div>
             <Select label={"Categoria"} style={{ width: "57rem" }}>
               {categorias.map((categoria) => (
-                <Option key={categoria.id} value={categoria.nome}>
+                <Option
+                  key={categoria.id}
+                  value={categoria.nome}
+                  onClick={() => {
+                    setProdutoObj({
+                      ...produtoObj,
+                      categoria: categorias as {},
+                    });
+                  }}
+                >
                   {categoria.nome}
                 </Option>
               ))}
@@ -355,9 +449,15 @@ export default function Produtos() {
         <S.FilterContainer>
           <div>
             <Select label={"Cor"} style={{ width: "57rem" }}>
-              {cores.map((cores) => (
-                <Option key={cores.id} value={cores.nome}>
-                  {cores.nome}
+              {cores.map((cor) => (
+                <Option
+                  key={cor.id}
+                  value={cor.nome}
+                  onClick={() => {
+                    setProdutoObj({ ...produtoObj, cor: cores as {} });
+                  }}
+                >
+                  {cor.nome}
                 </Option>
               ))}
             </Select>
@@ -373,7 +473,13 @@ export default function Produtos() {
           <div>
             <Select label={"Fornecedor"} style={{ width: "57rem" }}>
               {fornecedores.map((fornecedores) => (
-                <Option key={fornecedores.id} value={fornecedores.name}>
+                <Option
+                  key={fornecedores.id}
+                  value={fornecedores.name}
+                  onClick={() => {
+                    setProdutoObj({ ...produtoObj, fornecedor: fornecedores });
+                  }}
+                >
                   {fornecedores.name}
                 </Option>
               ))}
@@ -388,25 +494,37 @@ export default function Produtos() {
 
         <S.FilterContainer>
           <div>
-            <Select label={"Tamanho"} style={{ width: "57rem" }}>
-              <Option key={1} value={"pp"}>
+            <Select
+              label={"Tamanho"}
+              style={{ width: "57rem" }}
+              onChange={(e) => {
+                setProdutoObj({
+                  ...produtoObj,
+                  tamanho: e.target.value as string,
+                });
+              }}
+            >
+              <Option key={1} value={"PP"}>
                 PP
               </Option>
-              <Option key={2} value={"p"}>
+              <Option key={2} value={"P"}>
                 P
               </Option>
-              <Option key={3} value={"m"}>
+              <Option key={3} value={"M"}>
                 M
               </Option>
-              <Option key={4} value={"g"}>
+              <Option key={4} value={"G"}>
                 G
               </Option>
-              <Option key={5} value={"gg"}>
+              <Option key={5} value={"GG"}>
                 GG
               </Option>
             </Select>
           </div>
         </S.FilterContainer>
+        <S.ButtonArea>
+          <ButtonComponent title="Cadastrar" onClick={() => postProduto()} />
+        </S.ButtonArea>
       </S.Container>
 
       <ModalNovaMarca

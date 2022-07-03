@@ -34,3 +34,9 @@ export const TextContainer = styled.div`
   gap: 7rem;
   margin: 2rem 0;
 `;
+
+export const ButtonArea = styled.div`
+display: flex;
+margin: 2rem 0;
+gap: 2rem;
+`;
