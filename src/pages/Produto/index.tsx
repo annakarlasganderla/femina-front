@@ -2,6 +2,9 @@ import { BaseContainer } from "../../utils/Layout/BaseContainer";
 import { TextFieldComponent } from "../../components/Generic/TextField";
 import { Select } from "../../components/Generic/Select";
 import { Option } from "../../components/Generic/Select/styles";
+import FormControl from "@mui/material/FormControl";
+
+import { FileProps } from "../../types/Upload";
 
 import { ModalNovaMarca } from "./components/NovaMarca";
 import { ModalNovaCategoria } from "./components/NovaCategoria";
@@ -22,13 +25,18 @@ import * as S from "./styles";
 import { useEffect, useState } from "react";
 import { ProdutoProps } from "../../interfaces/Produto";
 import { ButtonComponent } from "../../components/Generic/Button";
+import { Upload } from "../../components/Generic/Upload/indext";
+import { RadioButton } from "../../components/Generic/RadioButton";
+import Switch, { SwitchProps } from "@mui/material/Switch";
+import styled from "styled-components";
+import { FormControlLabel } from "@mui/material";
 
 export interface AlertSettingsProps {
   message: string;
   type: "error" | "success" | "info" | "warning";
 }
 
-export default function Produtos() {
+export default function ProdutoForm() {
   const marcaObjInitialState = {
     nome: "",
   };
@@ -113,12 +121,17 @@ export default function Produtos() {
     produtoObjInitialState
   );
   console.log(produtoObj);
+
   const [openAlert, setOpenAlert] = useState(false);
   const [alertSettings, setAlertSettings] = useState<AlertSettingsProps>({
     message: "",
     type: "success",
   });
 
+  const [checked, setChecked] = useState<boolean>();
+
+  const [files, setFiles] = useState<FileProps[]>([]);
+  console.log(files);
   const postCor = () => {
     const corObjFinal = {
       ...corObj,
@@ -522,6 +535,30 @@ export default function Produtos() {
             </Select>
           </div>
         </S.FilterContainer>
+
+        <S.UploadArea>
+          <Upload
+            maxSize={5240000}
+            accept={".pdf"}
+            setFiles={setFiles}
+            files={files}
+            title={"Adicionar a imagem do produto"}
+          />
+        </S.UploadArea>
+
+        <S.SwitchArea>
+          <h2>O produto é um destaque?</h2>
+          <FormControlLabel
+            control={
+              <S.Android12Switch
+                checked={checked}
+                onChange={() => setChecked(true)}
+              />
+            }
+            label={checked ? "Sim" : "Não"}
+          />
+        </S.SwitchArea>
+
         <S.ButtonArea>
           <ButtonComponent title="Cadastrar" onClick={() => postProduto()} />
         </S.ButtonArea>

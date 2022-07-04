@@ -7,7 +7,7 @@ import { useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import { routes } from "../../../utils/Routes";
+import { routes } from "../../../service/Routes";
 import Image from 'next/image'
 
 

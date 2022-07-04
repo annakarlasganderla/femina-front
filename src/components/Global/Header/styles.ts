@@ -38,7 +38,7 @@ export const StyledLinkDrawer = styled(Link)`
   &&&{
     color: white;
     font-size: 1.1rem;
-    font-family: poppins;
+    font-family: Roboto;
     text-decoration: none;
   }
 `
@@ -94,5 +94,5 @@ export const StyledLink = styled.a`
   text-decoration: none;
   color: white;
   font-size: 1.1rem;
-  font-family: Poppins;
+  font-family: Roboto;
 `;
