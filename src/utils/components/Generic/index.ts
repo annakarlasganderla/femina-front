@@ -1,6 +1,3 @@
-
-
-
 export const setBackgroundColor = (backgroundColor: string): string => {
   switch (backgroundColor) {
     case "primary":
