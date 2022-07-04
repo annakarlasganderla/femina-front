@@ -16,11 +16,11 @@ export const CardProduct = ({
 }: ProdutoProps) => {
   return (
     <S.Container>
-      <img src={productPhoto} alt={productPhotoDescription} />
-      <h2>{name}</h2>
-      <p>
-        {price?.toLocaleString("pt-br", { style: "currency", currency: "BRL" })}
-      </p>
+      <S.StyledImage src={productPhoto} alt={productPhotoDescription} />
+      <S.TextArea>
+        <S.TextTitle>{name}</S.TextTitle>
+        <S.TextPrice>{price?.toLocaleString("pt-br", { style: "currency", currency: "BRL" })}</S.TextPrice>
+      </S.TextArea>
     </S.Container>
   );
 };
