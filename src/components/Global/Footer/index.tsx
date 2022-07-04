@@ -1,6 +1,6 @@
 import * as S from "./styles";
 import { AiOutlineInstagram, AiOutlineWhatsApp, AiFillFacebook } from "react-icons/ai";
-import { ST } from "next/dist/shared/lib/utils";
+const logo =  require("../../../public/logo.png")
 
 export const Footer = () => {
     return (
@@ -14,7 +14,7 @@ export const Footer = () => {
                     <S.TextParagraph>CEP: 85880-000</S.TextParagraph>
                 </S.TextContent>
             </S.InfoArea>  
-            <S.ImageArea src="../../../public/logo.png" alt="Logo" />
+            <S.ImageArea src={logo} alt="Logo" />
             <S.InfoArea>
                 <S.TextTitle>Entre em contato conosco</S.TextTitle>
                 <S.TextContent>
