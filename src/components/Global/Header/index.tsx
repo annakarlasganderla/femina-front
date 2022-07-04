@@ -17,51 +17,53 @@ export const Header = () => {
   return (
     <header>
       <S.HeaderContainer>
-        <S.LogoArea>
-          <AiOutlineMenu
-            color="white"
-            cursor="pointer"
-            onClick={() => setOpenSideBar(true)}
-            size={30}
-          />
-          <img src="../../../public/logoProvisoria.svg" alt="logo" />
-        </S.LogoArea>
+        <S.ItemsContainer>
+          <S.LogoArea>
+            <AiOutlineMenu
+              color="white"
+              cursor="pointer"
+              onClick={() => setOpenSideBar(true)}
+              size={30}
+            />
+            <img src="../../../public/logoProvisoria.svg" alt="logo" />
+          </S.LogoArea>
 
-        <S.StyledDrawer
-          anchor={"left"}
-          open={openSideBar}
-          onClose={() => setOpenSideBar(false)}
-        >  
-          {routes.map((routes) => (
-            <ListItem  key={routes.id}>
-              <S.StyledListButton>
-                <S.StyledLinkDrawer href={routes.route}>{routes.nome}</S.StyledLinkDrawer>
-              </S.StyledListButton>
-            </ListItem>
-          ))}
-        </S.StyledDrawer>
+          <S.StyledDrawer
+            anchor={"left"}
+            open={openSideBar}
+            onClose={() => setOpenSideBar(false)}
+          >  
+            {routes.map((routes) => (
+              <ListItem  key={routes.id}>
+                <S.StyledListButton>
+                  <S.StyledLinkDrawer href={routes.route}>{routes.nome}</S.StyledLinkDrawer>
+                </S.StyledListButton>
+              </ListItem>
+            ))}
+          </S.StyledDrawer>
 
-        {/* <div>
-          <S.StyledTextField
-            variant="standard"
-            placeholder="O que deseja?"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">checked</InputAdornment>,
-            }}
-          />
-        </div> */}
+          {/* <div>
+            <S.StyledTextField
+              variant="standard"
+              placeholder="O que deseja?"
+              InputProps={{
+                endAdornment: <InputAdornment position="end">checked</InputAdornment>,
+              }}
+            />
+          </div> */}
 
-        <S.ButtonArea>
-          <S.ButtonIcon>
-            <S.StyledLink href="#">Login</S.StyledLink>
-            <AiOutlineUser color="white" />
-          </S.ButtonIcon>
+          <S.ButtonArea> 
+            <S.ButtonIcon>
+              <S.StyledLink href="#" >Login</S.StyledLink>
+              <AiOutlineUser size="16px" />
+            </S.ButtonIcon>
 
-          <S.ButtonIcon>
-            <S.StyledLink href="#">Cadastre-se</S.StyledLink>
-            <AiOutlineUserAdd color="white" />
-          </S.ButtonIcon>
-        </S.ButtonArea>
+            <S.ButtonIcon>
+              <S.StyledLink href="#">Cadastre-se</S.StyledLink>
+              <AiOutlineUserAdd size="16px" />
+            </S.ButtonIcon>
+          </S.ButtonArea>
+        </S.ItemsContainer>
       </S.HeaderContainer>
     </header>
   );

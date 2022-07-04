@@ -30,7 +30,6 @@ export const ButtonArea = styled.div`
     height: 95%;
     position: absolute;
     display : flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: end;
 `;
@@ -44,20 +43,27 @@ export const StyledButton = styled(Button)`
     font-height: 400;
     font-size: 12px;
     line-height: 18px;
+    transition: all 0.8s;
     &:hover { 
         background: #A77371;
     }
 `;
 
 export const TextTitle = styled(Typography)`
+    max-width: 250px;
     color: #ffffff;
     font-family: "Roboto";
     font-height: 400;
-    font-size: 50px;
+    font-size: 2rem;
     line-height: 80px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    @media (min-width: 1024px) {
+        max-width: 100%;
+        font-size: 3rem;
+    }
 `;
 
 export const StyledImagem = styled.img`
     width: 100%;
-    max-height: 29rem;
+    height: 25rem;
 `;
